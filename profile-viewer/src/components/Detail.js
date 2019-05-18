@@ -1,67 +1,51 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
+import '../App.css';
 
-class Detail extends React.Component {
-  state={
-    clickedRepo: String
-  }
-  getClickedRepoName(repoName){
-    console.log(repoName);
-    this.setState({clickedRepo: repoName});
-  };
-  render(){
-      if (!this.props.isLoaded) {
-        return null;
-      }else{
-        return(
-            <div style={{width: "60%"}}>
+const Detail = (props) => (
+  <div className="detail">
+    {props.isLoaded && !props.error && <div>
+      <div className="row">
+        <div className="col-md-12">&nbsp;</div>
+      </div>
+      <div className="row">
+        <div className="col-md-3 detailImg">
+          {props.avatar_url && <img src={props.avatar_url} alt="Avatar URL" className="thumbnail detailImgWid"/>}
+        </div>
+        <div className="col-md-8 deatilName">
+          {props.name && <p>{props.name}</p>}
+          {props.company && <p>{props.company}</p>}
+        </div>
+      </div>
                 
-                <div className="row">
-                    <div className="col-md-4">
-                      {this.props.avatar_url && <img src={this.props.avatar_url} alt="Avatar URL" className="thumbnail" style={{width: "60%"}} />}
-                    </div>
-                    <div className="col-md-1">
-                        {this.props.login && <p>{this.props.login}</p>}
-                    </div>
-                </div>
-                
-                <Tabs defaultIndex={0}>
-                  <TabList>
-                    <Tab>Repositries({this.props.public_repos})</Tab>
-                    <Tab>Followers({this.props.followers})</Tab>
-                    <Tab>Followering({this.props.following})</Tab>
-                  </TabList>
+  <Tabs defaultIndex={0}>
+      <TabList>
+        <Tab>Repositries({props.public_repos})</Tab>
+        <Tab>Followers({props.followers})</Tab>
+        <Tab>Followering({props.following})</Tab>
+      </TabList>
 
-                  <TabPanel>
-                    <ul>
-                      {this.props.repoName.map(function(repoName, index){
-                        return <li key={ index } onClick={() => this.getClickedRepoName(repoName)}>{repoName}</li>;
-                      },this)}
-                    </ul>
-                  </TabPanel>
-                  <TabPanel>
-                    <ul>
-                      {this.props.followerLogin.map(function(followerName, index){
-                        return <li key={ index }>{followerName}</li>;
-                      })}
-                    </ul>
-                  </TabPanel>
-                  <TabPanel>
-                    <ul>
-                      {this.props.followingLogin.map(function(followingName, index){
-                        return <li key={ index }>{followingName}</li>;
-                      })}
-                    </ul>
-                  </TabPanel>
+      <TabPanel>
+        {props.repoName.map(function(repoName, index){
+          return <p className="repo" key={ index } onClick={() => this.getClickedRepoName(repoName)}>{repoName}</p>;
+        })}
+      </TabPanel>
+      <TabPanel>
+        {props.followerLogin.map(function(followerName, index){
+          return <p className="repo" key={ index }>{followerName}</p>;
+        })}
+      </TabPanel>
+      <TabPanel>
+        {props.followingLogin.map(function(followingName, index){
+          return <p className="repo" key={ index }>{followingName}</p>;
+        })}
+      </TabPanel>
 
-                </Tabs>
-                {this.props.error && <p>{this.props.error}</p>}
-
-            </div>    
-        );
-      }
-    }
-}
+    </Tabs>
+  </div>}
+  <div>{props.error && <p>{props.error}</p>}</div>
+  </div>    
+)
 
 export default Detail;
